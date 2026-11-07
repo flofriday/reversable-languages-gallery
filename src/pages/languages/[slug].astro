@@ -1,0 +1,281 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import CodeBlock from "@/components/CodeBlock";
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import { languages, tagsOf } from "@/data/languages";
+import type { Language } from "@/data/languages";
+import { tagStyle } from "@/lib/tags";
+import { u } from "@/lib/base";
+import { ArrowLeft, ArrowUpRight, FileText, Wrench, Code2, BookOpen, Calendar, Database, Terminal } from "lucide-react";
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({
+    params: { slug: lang.slug },
+    props: { lang },
+  }));
+}
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const tags = tagsOf(lang);
+---
+
+<Layout title={lang.name} description={lang.summary}>
+  <!-- Breadcrumb -->
+  <nav class="flex items-center gap-2 text-sm text-muted">
+    <a href={u("/")} class="inline-flex items-center gap-1 hover:text-lav-700">
+      <ArrowLeft className="h-3.5 w-3.5" /> All languages
+    </a>
+    <span class="text-line">/</span>
+    <span class="text-ink">{lang.name}</span>
+  </nav>
+
+  <!-- Title block -->
+  <header class="mt-6 border-b border-line pb-8">
+    <div class="flex flex-wrap items-center gap-2">
+      <Badge variant="outline" className="border-line bg-paper font-mono text-xs text-muted">
+        <Calendar className="mr-1 h-3 w-3" /> {lang.year}
+      </Badge>
+      {
+        tags.map((t) => (
+          <span class:list={["inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium", tagStyle(t).badge]}>
+            {t}
+          </span>
+        ))
+      }
+      <Badge variant="secondary" className="bg-lav-100 text-[11px] text-lav-700">{lang.paradigm}</Badge>
+    </div>
+    <div class="mt-4 flex flex-wrap items-center gap-5">
+      <h1 class="text-4xl font-semibold tracking-tight sm:text-[42px]">{lang.name}</h1>
+      {
+        lang.logo && (
+          <img
+            src={lang.logo}
+            alt={`${lang.name} logo`}
+            class="h-14 w-auto max-w-[240px] rounded-md border border-line bg-card object-contain p-1.5 shadow-sm"
+          />
+        )
+      }
+    </div>
+    <p class="mt-3 max-w-2xl text-lg text-muted">{lang.summary}</p>
+    {lang.logo && lang.logoCredit && <p class="mt-2 font-mono text-xs text-muted">logo: {lang.logoCredit}</p>}
+    <dl class="mt-6 grid max-w-2xl grid-cols-1 gap-3 text-sm sm:grid-cols-3">
+      <div class="rounded-lg border border-line bg-card p-3">
+        <dt class="font-mono text-[11px] uppercase tracking-wider text-muted">Invented / published</dt>
+        <dd class="mt-1 font-medium">{lang.year}</dd>
+      </div>
+      <div class="rounded-lg border border-line bg-card p-3">
+        <dt class="font-mono text-[11px] uppercase tracking-wider text-muted">Reversibility</dt>
+        <dd class="mt-1 font-medium">{lang.reversibility}</dd>
+      </div>
+      <div class="rounded-lg border border-line bg-card p-3">
+        <dt class="font-mono text-[11px] uppercase tracking-wider text-muted">Source available</dt>
+        <dd class="mt-1 font-medium">
+          {lang.sourceAvailable ? (
+            <span class="text-sage-600">yes</span>
+          ) : (
+            <span class="text-amber-600">no (paper / thesis only)</span>
+          )}
+        </dd>
+      </div>
+    </dl>
+    {lang.sourceNote && <p class="mt-3 text-sm text-muted">Note: {lang.sourceNote}</p>}
+  </header>
+
+  <!-- Overview -->
+  <section class="prose-site mt-8 max-w-none">
+    <h2>Overview</h2>
+    {lang.description.map((p) => <p>{p}</p>)}
+  </section>
+
+  <!-- Key constructs -->
+  {
+    lang.constructs && lang.constructs.length > 0 && (
+      <section class="mt-10">
+        <h2 class="mb-4 flex items-center gap-2 text-2xl font-semibold tracking-tight">
+          <Code2 className="h-5 w-5 text-lav-600" /> Key constructs
+        </h2>
+        <div class="overflow-hidden rounded-xl border border-line bg-card shadow-sm">
+          <table class="w-full text-[15px]">
+            <tbody>
+              {lang.constructs.map((c, i) => (
+                <tr class:list={[i > 0 && "border-t border-line/70"]}>
+                  <td class="w-1/3 px-4 py-3 align-top">
+                    <code class="rounded bg-lav-50 px-1.5 py-0.5 font-mono text-[13px] text-lav-700 ring-1 ring-lav-200/70">{c.term}</code>
+                  </td>
+                  <td class="px-4 py-3 align-top text-ink/80">{c.detail}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Verified examples -->
+  {
+    lang.examples && lang.examples.length > 0 && (
+      <section class="mt-10">
+        <h2 class="mb-1 flex items-center gap-2 text-2xl font-semibold tracking-tight">
+          <FileText className="h-5 w-5 text-primary" /> Examples
+          <span class="font-mono text-xs font-normal text-muted">{lang.examples.length}</span>
+        </h2>
+        {lang.examples.length > 1 && (
+          <label class="mt-3 flex items-center gap-2 text-sm text-muted">
+            <span class="font-mono text-xs uppercase tracking-wider">example:</span>
+            <select
+              id="example-select"
+              class="h-9 rounded-md border border-input bg-card px-3 font-mono text-[13px] shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+            >
+              {lang.examples.map((ex, i) => (
+                <option value={i}>{ex.title}</option>
+              ))}
+            </select>
+          </label>
+        )}
+        {lang.examples.map((ex, i) => (
+          <div class="example-block mt-4" data-idx={i} style={i === 0 ? "" : "display:none"}>
+            <p class="text-sm font-medium text-foreground/80">{ex.title}</p>
+            <div class="mt-2 overflow-hidden rounded-xl border border-border bg-[#faf8f3] p-4 shadow-sm [&_pre]:!m-0 [&_pre]:!border-0 [&_pre]:!bg-transparent [&_pre]:!p-0 [&_pre]:!text-sm [&_code]:!bg-transparent">
+              <CodeBlock code={ex.code} lang={ex.lang} client:load />
+            </div>
+            {ex.note && <p class="mt-2 text-sm text-muted">{ex.note}</p>}
+            <p class="mt-1 text-sm text-muted">
+              Verified source: <span class="font-mono text-[13px]">{ex.source}</span>
+            </p>
+          </div>
+        ))}
+        <script>
+          const sel = document.getElementById("example-select");
+          if (sel) {
+            sel.addEventListener("change", () => {
+              document.querySelectorAll(".example-block").forEach((b) => {
+                b.style.display = b.dataset.idx === sel.value ? "" : "none";
+              });
+            });
+          }
+        </script>
+      </section>
+    )
+  }
+  {
+    (!lang.examples || lang.examples.length === 0) && (
+      <section class="mt-10">
+        <h2 class="mb-1 flex items-center gap-2 text-2xl font-semibold tracking-tight">
+          <FileText className="h-5 w-5 text-primary" /> Examples
+        </h2>
+        <p class="rounded-lg border border-dashed border-border bg-card p-4 text-sm text-muted">
+          No code example was captured verbatim from the researched sources for this entry — see the
+          papers below. (This gallery only shows examples it could verify against a primary source.)
+        </p>
+      </section>
+    )
+  }
+
+  <!-- Papers -->
+  <section class="mt-10">
+    <h2 class="mb-4 flex items-center gap-2 text-2xl font-semibold tracking-tight">
+      <BookOpen className="h-5 w-5 text-primary" /> Papers
+      <span class="font-mono text-xs font-normal text-muted">{lang.papers.length}</span>
+    </h2>
+    {
+          lang.papers.length > 0 ? (
+            <ul class="space-y-3">
+              {lang.papers.map((p) => (
+                <li class="rounded-xl border border-border bg-card p-4 shadow-xs">
+                  <p class="text-[15px] font-medium leading-snug">
+                    {p.url ? (
+                      <a href={p.url} target="_blank" rel="noopener" class="inline-flex items-start gap-1 text-foreground hover:text-primary hover:underline hover:decoration-lav-300">
+                        {p.title}
+                        <ArrowUpRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted" />
+                      </a>
+                    ) : (
+                      p.title
+                    )}
+                  </p>
+                  <p class="mt-1 text-sm text-muted">
+                    {p.authors} · {p.year}
+                    {p.venue && <span> · <em>{p.venue}</em></span>}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="rounded-lg border border-dashed border-border bg-card p-4 text-sm text-muted">
+              No papers captured for this entry (community/experimental project).
+            </p>
+          )
+    }
+  </section>
+
+  <!-- Implementations -->
+  <section class="mt-10">
+    <h2 class="mb-4 flex items-center gap-2 text-2xl font-semibold tracking-tight">
+      <Wrench className="h-5 w-5 text-primary" /> Implementations
+      <span class="font-mono text-xs font-normal text-muted">{lang.implementations.length}</span>
+    </h2>
+    {
+      lang.implementations.length > 0 ? (
+        <ul class="space-y-3">
+          {lang.implementations.map((impl) => (
+            <li class="flex items-center justify-between gap-4 rounded-xl border border-border bg-card p-4 shadow-xs">
+              <div>
+                <p class="text-[15px] font-medium">
+                  {impl.url ? (
+                    <a href={impl.url} target="_blank" rel="noopener" class="inline-flex items-center gap-1 hover:text-primary hover:underline hover:decoration-lav-300">
+                      {impl.name}
+                      <ArrowUpRight className="h-3.5 w-3.5 text-muted" />
+                    </a>
+                  ) : (
+                    impl.name
+                  )}
+                </p>
+                <p class="mt-0.5 text-sm text-muted">{impl.kind}</p>
+              </div>
+              {impl.url?.includes("github.com") && <Terminal className="h-4 w-4 shrink-0 text-muted" />}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="rounded-lg border border-dashed border-border bg-card p-4 text-sm text-muted">
+          No public implementation found. See the papers for the formal description.
+        </p>
+      )
+    }
+    <p class="mt-3 rounded-lg border border-lav-200 bg-lav-50 p-3 text-sm text-lav-700">
+      <Database className="mr-1 inline h-3.5 w-3.5" />
+      Planned: run selected interpreters in the browser via WebAssembly. For now, implementations are
+      linked externally.
+    </p>
+  </section>
+
+  <!-- Links -->
+  {
+    lang.links && lang.links.length > 0 && (
+      <section class="mt-10">
+        <h2 class="mb-4 text-2xl font-semibold tracking-tight">Links</h2>
+        <ul class="space-y-2">
+          {lang.links.map((l) => (
+            <li>
+              <a href={l.url} target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-[15px] text-lav-700 hover:underline">
+                {l.label} <ArrowUpRight className="h-3.5 w-3.5" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <!-- Back -->
+  <div class="mt-14 border-t border-border pt-6">
+    <a href={u("/")} class={buttonVariants({ variant: "outline" })}>
+      <ArrowLeft className="h-4 w-4" /> Back to the overview
+    </a>
+  </div>
+</Layout>

@@ -1,0 +1,115 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { languages } from "@/data/languages";
+
+const surveys = [
+  {
+    title: "Reversible computing from a programming language perspective",
+    authors: "R. Glück, T. Yokoyama",
+    venue: "Theoretical Computer Science 953 (2023), 113429",
+    url: "https://doi.org/10.1016/j.tcs.2022.06.010",
+  },
+  {
+    title: "Reversible programming language (overview)",
+    authors: "Wikipedia contributors",
+    venue: "Wikipedia",
+    url: "https://en.wikipedia.org/wiki/Reversible_programming_language",
+  },
+  {
+    title: "Reversible Programming Languages (survey PDF)",
+    authors: "V. Choudhury",
+    venue: "2018",
+    url: "https://vikraman.org/files/reversible-languages.pdf",
+  },
+  {
+    title: "Open source reversible programming (curated list)",
+    authors: "The Reversibility Institute",
+    venue: "reversibility.org",
+    url: "https://reversibility.org/programming/open-source",
+  },
+  {
+    title: "The Logic of Reversible Computing (PhD thesis)",
+    authors: "R. Kaarsgaard",
+    venue: "University of Copenhagen, 2017",
+    url: "https://di.ku.dk/english/research/phd/phd-theses/2018/Robin_Kaarsgaard_Thesis.pdf",
+  },
+];
+
+const venues = [
+  "Reversible Computation (RC) — annual conference, LNCS proceedings",
+  "Programming Language Design and Implementation (PLDI), POPL, ICFP, CAV — for circuit compilation and quantum languages",
+  "DIKU PIRC group (University of Copenhagen) — Janus, RFun, CoreFun, and much of the surrounding theory",
+];
+---
+
+<Layout title="About & sources" description="How this gallery was compiled, what counts as reversible, and the main surveys and venues.">
+  <article class="prose-site max-w-none">
+    <p class="font-mono text-xs uppercase tracking-widest text-lav-600">about</p>
+    <h1 class="mt-3 text-4xl font-semibold tracking-tight">About this gallery</h1>
+
+    <h2>What counts as “reversible” here</h2>
+    <p>
+      An entry is a <strong>reversible programming language</strong> if its well-formed programs are
+      deterministic in <em>both</em> directions: the state transition is injective, so the previous
+      state can be recovered without an external history. That is different from undo/reverse
+      debugging (rr, GDB), where a trace or checkpoint is kept — those appear under
+      <em>Retrofitted</em> and <em>Tools</em> for context.
+    </p>
+    <p>
+      Most languages enforce this by <strong>local invertibility</strong>: reversible updates
+      (<code>x += e</code>, <code>x &lt;=&gt; y</code>), conditionals with entry test <em>and</em> exit
+      assertion, loops with entry assertion and exit test, and <code>call</code>/<code>uncall</code>.
+      A few entries (Eel, Sparcl, Jeopardy, HSSA) deliberately allow partial or global-only
+      invertibility.
+    </p>
+
+    <h2>How the entries were compiled</h2>
+    <p>
+      Every entry on this site was researched against primary sources (papers, theses, project
+      pages) in November 2026. Each language page lists its papers, its publication/invention year,
+      whether source code is publicly available, and links to implementations. Code examples are
+      only shown when they were captured verbatim from a verifiable source (currently Janus, R/PISA,
+      and NiLang) — nothing is invented.
+    </p>
+    <p>
+      There are {languages.length} entries. The machine-readable version of the catalog lives in
+      <code>languages.csv</code> in the repository; this site is generated from an equivalent data
+      file with Astro.
+    </p>
+
+    <h2>Main surveys &amp; starting points</h2>
+    <ul>
+      {
+        surveys.map((s) => (
+          <li>
+            <a href={s.url} target="_blank" rel="noopener">{s.title}</a> — {s.authors}, <em>{s.venue}</em>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2>Where the research happens</h2>
+    <ul>
+      {venues.map((v) => <li>{v}</li>)}
+    </ul>
+
+    <h2>Planned: in-browser execution</h2>
+    <p>
+      A future version of this gallery will run selected interpreters (Janus, RFun, …) directly in
+      your browser via WebAssembly. For now, implementation links on each language page point to the
+      original projects.
+    </p>
+
+    <h2>Logos &amp; credits</h2>
+    <p>
+      Only official project logos are shown, downloaded from the projects themselves. Most
+      languages in this catalog have no logo at all — that is typical for research languages.
+    </p>
+    <ul>
+      <li><strong>Rever</strong> — <code>logo.png</code> from the project repository (0BSD), codeberg.org/1011X/rever</li>
+      <li><strong>NiLang</strong> — logos from the project documentation (Apache-2.0), github.com/GiggleLiu/NiLang.jl</li>
+      <li><strong>Silq</strong> — official logo, ETH Zürich, CC BY-SA 4.0, silq.ethz.ch</li>
+      <li><strong>Q#</strong> — logo via Wikimedia Commons (CC BY-SA 4.0), Microsoft QDK</li>
+    </ul>
+  </article>
+</Layout>

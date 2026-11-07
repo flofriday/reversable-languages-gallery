@@ -1,0 +1,28 @@
+---
+import { Separator } from "@/components/ui/separator";
+import { languages } from "@/data/languages";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-line bg-paper">
+  <div class="mx-auto w-full max-w-5xl px-6 py-10">
+    <Separator className="mb-8" />
+    <div class="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+      <div class="max-w-md">
+        <p class="flex items-center gap-2 font-semibold">
+          <span class="flex h-6 w-6 items-center justify-center rounded-md bg-lav-100 font-mono text-xs text-lav-700 ring-1 ring-lav-200">⇄</span>
+          Reversible Language Gallery
+        </p>
+        <p class="mt-2 text-sm text-muted">
+          {languages.length} entries on reversible and bidirectional computation, compiled from the
+          primary literature. Every detail page links its papers and implementations.
+        </p>
+      </div>
+      <div class="text-sm text-muted md:text-right">
+        <p>Built with <a class="underline decoration-lav-200 underline-offset-2 hover:text-lav-700" href="https://astro.build">Astro</a> · static site</p>
+        <p class="mt-1">Set in Libertinus Serif & JetBrains Mono · {year}</p>
+      </div>
+    </div>
+  </div>
+</footer>

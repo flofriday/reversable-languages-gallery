@@ -1,0 +1,265 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { buttonVariants } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { languages, kindOf, tagsOf, allTags } from "@/data/languages";
+import { tagStyle } from "@/lib/tags";
+import { u } from "@/lib/base";
+
+const langs = languages
+  .filter((l) => kindOf(l) === "language")
+  .sort((a, b) => a.sortYear - b.sortYear);
+const tools = languages
+  .filter((l) => kindOf(l) === "tool")
+  .sort((a, b) => a.sortYear - b.sortYear);
+const tags = allTags();
+const total = languages.length;
+const firstYear = Math.min(...languages.map((l) => l.sortYear));
+
+function card(l: (typeof languages)[number]) {
+  return {
+    href: u(`/languages/${l.slug}/`),
+    name: l.name,
+    year: l.year,
+    summary: l.summary,
+    paradigm: l.paradigm,
+    logo: l.logoCard ?? l.logo,
+    tags: tagsOf(l),
+  };
+}
+const langCards = langs.map(card);
+const toolCards = tools.map(card);
+---
+
+<Layout title="Overview">
+  <!-- Hero -->
+  <section class="border-b border-border pb-10">
+    <p class="font-mono text-xs uppercase tracking-widest text-primary">⇄ reversible computing · field guide</p>
+    <h1 class="mt-3 text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+      Reversible Language Gallery
+    </h1>
+    <p class="mt-5 max-w-2xl text-lg text-muted">
+      A catalog of programming languages in which computation is deterministic{" "}
+      <em>both forwards and backwards</em> — every program can be run in reverse.{" "}
+      {total} entries spanning {firstYear}–2026: languages and the tools that bring
+      reversibility to ordinary code.
+    </p>
+    <div class="mt-7 flex flex-wrap items-center gap-3">
+      <a href={u("#filters")} class={buttonVariants({ size: "lg" })}>Browse the {total} entries ↓</a>
+      <a href={u("/about/")} class={buttonVariants({ variant: "outline", size: "lg" })}>About &amp; sources</a>
+    </div>
+  </section>
+
+  <!-- Filter bar -->
+  <section class="mt-10 scroll-mt-24" id="filters">
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="mr-1 font-mono text-xs uppercase tracking-wider text-muted">filter:</span>
+      <input
+        id="filter"
+        type="search"
+        placeholder="type to search, e.g. janus, ssa, quantum…"
+        class="h-9 w-64 rounded-md border border-input bg-card px-3 font-mono text-sm shadow-xs outline-none placeholder:text-muted/60 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+      />
+    </div>
+    <div class="mt-3 flex flex-wrap gap-1.5" id="pills">
+      {
+        tags.map(({ tag, count }) => {
+          const s = tagStyle(tag);
+          return (
+            <button
+              type="button"
+              data-tag={tag}
+              class:list={[
+                "pill inline-flex items-center gap-1.5 rounded-full border border-input bg-card px-3 py-1 text-sm text-muted shadow-xs transition-colors hover:border-lav-300 hover:text-lav-700",
+              ]}
+              data-active-class={s.pill}
+            >
+              <span class:list={["h-2 w-2 rounded-full", s.bar]} />
+              {tag}
+              <span class="font-mono text-[11px] opacity-70">{count}</span>
+            </button>
+          );
+        })
+      }
+    </div>
+    <p id="showing" class="mt-3 font-mono text-xs text-muted">showing {total} of {total}</p>
+  </section>
+
+  <!-- Languages -->
+  <section id="languages" class="mt-12 scroll-mt-24" data-section>
+    <div class="flex items-baseline gap-3 border-b border-border pb-3">
+      <h2 class="text-xl font-semibold tracking-tight">Languages</h2>
+      <span class="font-mono text-xs text-muted">{langCards.length} entries</span>
+    </div>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        langCards.map((l) => (
+          <a
+            href={l.href}
+            class="group block"
+            data-card
+            data-tags={l.tags.join(" ")}
+            data-name={`${l.name} ${l.tags.join(" ")} ${l.paradigm} ${l.summary}`.toLowerCase()}
+          >
+            <Card className="h-full transition-all group-hover:-translate-y-0.5 group-hover:border-lav-300 group-hover:shadow-md">
+              <CardHeader>
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-2.5">
+                    {l.logo && (
+                      <img
+                        src={l.logo}
+                        alt=""
+                        class="h-7 w-auto max-w-[72px] rounded border border-border bg-card object-contain p-0.5"
+                      />
+                    )}
+                    <CardTitle className="text-[17px] leading-snug tracking-tight group-hover:text-primary">
+                      {l.name}
+                    </CardTitle>
+                  </div>
+                  <Badge variant="outline" className="shrink-0 font-mono text-[11px] text-muted">
+                    {l.year}
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="line-clamp-3 text-[15px] leading-relaxed">
+                  {l.summary}
+                </CardDescription>
+              </CardContent>
+              <CardFooter className="flex-wrap gap-1.5">
+                {l.tags.slice(0, 4).map((t) => (
+                  <span class:list={["inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-medium", tagStyle(t).badge]}>
+                    {t}
+                  </span>
+                ))}
+                {l.tags.length > 4 && (
+                  <span class="font-mono text-[11px] text-muted">+{l.tags.length - 4}</span>
+                )}
+                <span class="ml-auto truncate font-mono text-[11px] text-muted">{l.paradigm}</span>
+              </CardFooter>
+            </Card>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Tools -->
+  <section id="tools" class="mt-14 scroll-mt-24" data-section>
+    <div class="flex items-baseline gap-3 border-b border-border pb-3">
+      <h2 class="text-xl font-semibold tracking-tight">Tools</h2>
+      <span class="font-mono text-xs text-muted">{toolCards.length} entries</span>
+    </div>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        toolCards.map((l) => (
+          <a
+            href={l.href}
+            class="group block"
+            data-card
+            data-tags={l.tags.join(" ")}
+            data-name={`${l.name} ${l.tags.join(" ")} ${l.paradigm} ${l.summary}`.toLowerCase()}
+          >
+            <Card className="h-full transition-all group-hover:-translate-y-0.5 group-hover:border-lav-300 group-hover:shadow-md">
+              <CardHeader>
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-center gap-2.5">
+                    {l.logo && (
+                      <img
+                        src={l.logo}
+                        alt=""
+                        class="h-7 w-auto max-w-[72px] rounded border border-border bg-card object-contain p-0.5"
+                      />
+                    )}
+                    <CardTitle className="text-[17px] leading-snug tracking-tight group-hover:text-primary">
+                      {l.name}
+                    </CardTitle>
+                  </div>
+                  <Badge variant="outline" className="shrink-0 font-mono text-[11px] text-muted">
+                    {l.year}
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="line-clamp-3 text-[15px] leading-relaxed">
+                  {l.summary}
+                </CardDescription>
+              </CardContent>
+              <CardFooter className="flex-wrap gap-1.5">
+                {l.tags.slice(0, 4).map((t) => (
+                  <span class:list={["inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-medium", tagStyle(t).badge]}>
+                    {t}
+                  </span>
+                ))}
+                {l.tags.length > 4 && (
+                  <span class="font-mono text-[11px] text-muted">+{l.tags.length - 4}</span>
+                )}
+                <span class="ml-auto truncate font-mono text-[11px] text-muted">{l.paradigm}</span>
+              </CardFooter>
+            </Card>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <p id="no-results" class="mt-16 hidden rounded-lg border border-dashed border-border bg-card p-8 text-center text-muted">
+    No entries match your filter.
+  </p>
+</Layout>
+
+<script>
+  const input = document.getElementById("filter") as HTMLInputElement | null;
+  const pills = Array.from(document.querySelectorAll<HTMLButtonElement>("#pills .pill"));
+  const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-card]"));
+  const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-section]"));
+  const noResults = document.getElementById("no-results");
+  const showing = document.getElementById("showing");
+
+  const state = { q: "", active: new Set<string>() };
+
+  function apply() {
+    let visible = 0;
+    for (const card of cards) {
+      const tags = (card.dataset.tags ?? "").split(" ");
+      const textOk = !state.q || (card.dataset.name ?? "").includes(state.q);
+      const tagOk = state.active.size === 0 || tags.some((t) => state.active.has(t));
+      const show = textOk && tagOk;
+      card.style.display = show ? "" : "none";
+      if (show) visible++;
+    }
+    for (const sec of sections) {
+      const any = Array.from(sec.querySelectorAll<HTMLElement>("[data-card]")).some(
+        (c) => c.style.display !== "none"
+      );
+      sec.style.display = any ? "" : "none";
+    }
+    if (noResults) noResults.style.display = visible === 0 ? "" : "none";
+    if (showing) showing.textContent = `showing ${visible} of ${cards.length}`;
+  }
+
+  input?.addEventListener("input", () => {
+    state.q = input.value.trim().toLowerCase();
+    apply();
+  });
+
+  for (const pill of pills) {
+    pill.addEventListener("click", () => {
+      const tag = pill.dataset.tag!;
+      const activeClass = pill.dataset.activeClass!;
+      if (state.active.has(tag)) {
+        state.active.delete(tag);
+        pill.classList.remove(...activeClass.split(" "));
+        pill.classList.add("border-input", "bg-card", "text-muted");
+      } else {
+        state.active.add(tag);
+        pill.classList.add(...activeClass.split(" "));
+        pill.classList.remove("border-input", "bg-card", "text-muted");
+      }
+      apply();
+    });
+  }
+
+  apply();
+</script>

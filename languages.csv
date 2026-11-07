@@ -1,0 +1,54 @@
+name,year,family,paradigm,reversibility,implementation,link,notes
+Janus,1982,Imperative,Procedural,Full local invertibility,"Interpreters; compilers to PISA and RSSA",https://topps.diku.dk/pirc/?id=janus,Canonical reversible imperative language; r-Turing complete; call/uncall
+R (MIT),1997,Imperative,S-expression / procedural,Full local invertibility,Compiler to PISA,https://en.wikipedia.org/wiki/Reversible_programming_language,MIT Reversible Computing project; targets Pendulum
+Psi-Lisp,1992,Functional,Linear Lisp,Full local invertibility,Proposal,https://mirror.smallbone.se/hbaker/ReverseGC.html,Baker's reversible Linear Lisp; injective primitives and swaps
+Inv,2004,Functional,Point-free,Full local invertibility,Research language,,Point-free reversible language for document construction
+SRL,2003,Core,Imperative core,Total reversible functions,Formal model,,Simple reversible language with stacks and arrays
+R-CORE,2015,Core,Imperative core,Full local invertibility,Formal model,,Minimal r-Turing complete core language
+R-WHILE,2015,Core,Imperative core,Full local invertibility,Interpreter and formal semantics,http://tetsuo.jp/ref/RPLA2019,Reversible WHILE with tree data; linear-time self-interpreter
+RFCL,2015,Core,Flowchart,Full local invertibility,Formal model,,Reversible flowchart language; common core of structured reversible languages
+RFun,2011,Functional,First-order functional,Full local invertibility,Haskell interpreter,https://topps.diku.dk/pirc/?id=rfun,Untyped first-order reversible functional language; linear variables
+Theseus,2012,Functional,Typed functional,Partial isomorphisms,Prototype,https://homes.luddy.indiana.edu/sabry/files/theseus.pdf,Based on Pi/Pi-o; exhaustive non-overlapping patterns
+RCFUN,2014,Functional,Functional,Full local invertibility,Sketch / translation to Janus,,Reversible functional language with reference counting
+Eel,2016,Imperative,Procedural,Partial reversibility,Compiler and interpreter in Java,https://arxiv.org/abs/1605.08475,Log stack; energy accounting; protected vs general control flow
+ROOPL,2017,Object-oriented,Class-based OO,Full local invertibility,Compiler to PISA,https://arxiv.org/abs/1707.07845,First reversible object-oriented language
+CoreFun,2018,Functional,Typed functional,Full local invertibility,Prototype,https://github.com/diku-dk/coreFun,Type system statically guarantees reversibility; r-Turing complete
+ROOPL++,2018,Object-oriented,Class-based OO,Full local invertibility,Compiler to PISA and HSSA,https://arxiv.org/abs/1804.05097,Dynamic memory management and fixed-size arrays
+Yarel,2019,Functional,Core functional,Full local invertibility,Compiler to Java; Eclipse IDE,https://arxiv.org/abs/1902.05369,Primitive recursive complete; point-free style
+Sparcl,2020,Functional,Partially invertible functional,Partial invertibility,Interpreter and Agda formalization,https://github.com/kztk-m/sparcl,Linear types; unlift and pin constructs
+NiLang,2020,DSL,Reversible eDSL in Julia,Full local invertibility,Julia package,https://github.com/GiggleLiu/NiLang.jl,Reverse-mode automatic differentiation; arrays and floats
+Hermes,2020,DSL,Cryptography,Full local invertibility,Prototype compiler/interpreter,https://github.com/maltevelin/Hermes,Reversible encryption DSL; secret/public types
+Agni,2021,Functional,Array functional,Full local invertibility,Research language,,Reversible functional array programming
+Jeopardy,2022,Functional,First-order functional,Global invertibility,Prototype,https://github.com/jtkristensen/Jeopardy,Allows local irreversibility if whole program is invertible
+CRIL,2023,IR,Concurrent IR,Full local invertibility,Formal model,https://arxiv.org/abs/2309.07310,Concurrent reversible intermediate language with P/V synchronization
+Chardonnet-Lemonnier-Valiron language,2024,Functional,Higher-order functional,Partial isomorphisms,Formal language,https://arxiv.org/abs/2309.12151,Theseus-based; inductive types; Turing-complete
+HSSA,2024,IR,SSA-based IR,Partial reversibility,Compiler target,,Hybrid SSA mixing reversible and classical code
+PisoLang,2026,Functional,Typed functional,Full local invertibility,Prototype,https://www.riec.tohoku.ac.jp/~ksk/pub/Onodera26rc-full.pdf,User-friendly reversible functional language with inductive types
+L4,2026,IR,Low-level linearly typed,Full local invertibility,Formal model,https://arxiv.org/abs/2610.31201,Generic reversible intermediate language; successor to RSSA
+PISA,1999,ISA,Reversible RISC,Full local invertibility,Hardware and simulators,https://esolangs.org/wiki/Pendulum_Instruction_Set_Architecture,Pendulum processor ISA; direction and branch bits
+RSSA,2016,IR,Reversible SSA,Full local invertibility,Compiler IR,,Reversible SSA form for reversible languages
+RIL,2015,IR,Reversible IR,Full local invertibility,Compiler IR,,Reversible intermediate language for functional languages
+Revs,2016,Circuit,F#-based,Compiled to reversible circuits,Compiler (ReVerC),https://github.com/msr-quarc/ReVerC,Classical language compiled to combinational reversible circuits
+ReVerC,2017,Circuit,Compiler,Verified reversible compilation,Verified compiler in F*,https://github.com/msr-quarc/ReVerC,Compiles Revs to Q# or .qc; cleans ancillae
+Ricercar,2015,Circuit,Circuit description,Reversible circuit rewriting,Research language,,Language for reversible circuits with ancillae
+rcc (Reverse C Compiler),1999,Retrofit,C,Reversibilization by logging,Compiler,,"Source-to-source C instrumentation with SAVE/RESTORE"
+Rever-C,2010s,Retrofit,C,Reversibilization by logging,Compiler,,Source-to-source C reversal compiler
+Reversible Erlang,2020s,Retrofit,Erlang,Reversible semantics,Debugger and semantics,,Causal-consistent reversible debugging
+Reversible M,2022,Retrofit,Concurrent imperative,Reversible semantics,Formal model,https://arxiv.org/pdf/2205.01171,Reversible semantics for a concurrent imperative language
+RCCS,2004,Calculus,Process calculus,Reversible semantics,Formal model,,Reversible CCS with memories
+CCSK,2010s,Calculus,Process calculus,Reversible semantics,Formal model,,CCS with keys
+Quipper,2013,Quantum,Quantum,Unitary reversibility,Embedded in Haskell,,Quantum circuit generation
+Q#,2017,Quantum,Quantum,Unitary reversibility,Microsoft toolchain,,Quantum DSL with classical control
+Silq,2020,Quantum,Quantum,Unitary reversibility with automatic uncomputation,Prototype,,High-level quantum language with linear types
+Rever,2023,Imperative,Procedural,Full local invertibility,Interpreter in Rust,https://codeberg.org/1011X/rever,"Experimental language inspired by Janus, Pascal, and Python"
+RevPy,2026,Library,Reversible Python library,Full local invertibility,Python library,https://pypi.org/project/revpy-lang,Reversible functions with if/fi and while/elihw; static lifetime checks
+RL,—,Core,Unstructured imperative,Full local invertibility,Formal model,,Unstructured reversible language with jumps
+BobISA,2010s,ISA,Reversible instruction set,Full local invertibility,Hardware and simulators,,Small reversible processor ISA; target for RFun
+Reversible assembly-sequence DSL,2015,DSL,Robotics,Full local invertibility,Prototype,,Reversible sequencing of assembly operations
+bidicalc,2020s,Tool,Spreadsheet,Bidirectional computation,Open-source tool,https://victorpoughon.github.io/bidicalc,Bidirectional spreadsheet; edit output and solve for inputs
+rr,2010s,Tool,Reverse debugger,Record-and-replay,Open-source tool,https://rr-project.org,Deterministic replay and reverse execution under gdb
+GDB reverse debugging,2000s,Tool,Reverse debugger,Checkpoint-based,Part of GDB,https://sourceware.org/gdb/current/onlinedocs/gdb.html/Reverse-Execution.html,reverse-continue and reverse-step for native programs
+QCL,2000,Quantum,Quantum,Unitary reversibility,Prototype,,Early quantum programming language with classical control
+Proto-Quipper,2017,Quantum,Quantum,Unitary reversibility,Research language,,Dependently typed core for quantum circuit description
+RevKit,2010s,Tool,Reversible logic synthesis,Not a language,Open-source toolkit,https://github.com/msoeken/revkit,Toolkit for reversible and quantum logic synthesis
+Janus-to-circuit compiler,2015,Tool,Compiler,Compiles Janus variant to reversible circuits,Open-source compiler,https://github.com/aparent/rcc,Alex Parent's reversible circuit compiler based on Janus
