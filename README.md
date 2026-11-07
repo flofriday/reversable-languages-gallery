@@ -44,10 +44,15 @@ npm run preview    # serve dist/
 Push this repository to GitHub and enable **Pages → Build and deployment →
 GitHub Actions** in the repo settings. The workflow
 [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) builds the
-site on every push to `main` and deploys `dist/` to Pages automatically.
-The Astro `base` path is derived from `GITHUB_REPOSITORY`, so it works for
-both `https://<user>.github.io/<repo>/` project pages and
+site on every push to `main` and deploys `dist/` to Pages automatically
+(Node 24 — Astro 7 requires Node ≥ 22.23.4). The Astro `base` path is
+derived from `GITHUB_REPOSITORY`, so it works for both
+`https://<user>.github.io/<repo>/` project pages and
 `https://<user>.github.io/` user pages. No secrets needed.
+
+For `flofriday/reversable-languages-gallery` the site will be served at:
+
+**https://flofriday.github.io/reversable-languages-gallery/**
 
 ---
 
