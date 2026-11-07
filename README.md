@@ -17,6 +17,40 @@ A machine-readable version of the catalog is in [`languages.csv`](languages.csv)
 
 ---
 
+## 🌐 Website: Reversible Language Gallery
+
+This repository also contains a static website that presents the catalog:
+an overview of all 53 entries with tag-pill filters, and a detail page per
+language (description, key constructs, verified code examples with a
+dropdown and CodeMirror 6 highlighting, papers, implementations, logos).
+
+- **Stack**: Astro 7 (static) + React + shadcn/ui components (Radix + cva),
+  Tailwind CSS v4, CodeMirror 6 for code blocks, Libertinus Serif +
+  JetBrains Mono fonts.
+- **Data**: `src/data/languages.ts` — one entry per language; the site is
+  generated from it.
+
+### Run locally
+
+```bash
+npm ci
+npm run dev        # http://localhost:4321
+npm run build      # static output in dist/
+npm run preview    # serve dist/
+```
+
+### Deploy to GitHub Pages
+
+Push this repository to GitHub and enable **Pages → Build and deployment →
+GitHub Actions** in the repo settings. The workflow
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) builds the
+site on every push to `main` and deploys `dist/` to Pages automatically.
+The Astro `base` path is derived from `GITHUB_REPOSITORY`, so it works for
+both `https://<user>.github.io/<repo>/` project pages and
+`https://<user>.github.io/` user pages. No secrets needed.
+
+---
+
 ## Contents
 
 1. [What makes a language reversible?](#1-what-makes-a-language-reversible)
